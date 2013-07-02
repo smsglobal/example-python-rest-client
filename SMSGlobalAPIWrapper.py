@@ -5,7 +5,6 @@ import base64
 import time
 import random
 import string
-import json
 
 #
 # SMSGlobalAPIWrapper
@@ -13,7 +12,13 @@ import json
 #
 class SMSGlobalAPIWrapper (object):
 
-    def __init__(self, key, secret, protocol = "http", host = "api.smsglobal.com", port = 80, apiVersion = "v1", extraData = "", debug = False):
+    TYPE_JSON = "application/json"
+    TYPE_XML = "application/xml"
+    TYPE_YAML = "application/x-yaml"
+    TYPE_CSV = "text/csv"
+    TYPE_MSGPACK = "application/x-msgpack"
+
+    def __init__(self, key, secret, protocol = "http", host = "api.smsglobal.com", port = 80, apiVersion = "v1", extraData = "", debug = False, type = TYPE_CSV):
         self.key = key.strip()
         self.secret = secret.strip()
         self.protocol = protocol.lower()
@@ -22,6 +27,7 @@ class SMSGlobalAPIWrapper (object):
         self.apiVersion = apiVersion
         self.extraData = extraData
         self.debug = debug
+        self.type = type
 
     def get(self, action, id = None):
         return self.connect("GET", action, id)
@@ -41,13 +47,13 @@ class SMSGlobalAPIWrapper (object):
         if method not in ["GET", "POST", "DELETE"]:
             method = "GET"
 
-        headers = {"Authorization" : self.get_authorisation_http_header(method, action)}
+        headers = {"Authorization" : self.get_authorisation_http_header(method, action), "User-Agent" : "SMS Python Client", "Accept": self.type}
 
         # HTTP transportation
         http = httplib.HTTPConnection(self.host, self.port)
 
         if self.debug:
-            http.set_debuglevel(2)
+            http.set_debuglevel(1)
 
 
         # do it!
@@ -55,12 +61,8 @@ class SMSGlobalAPIWrapper (object):
         response = http.getresponse()
 
         if response.status == 200:
-            print response.read()
-
-            http.close()
-            return json_data
+            return response.read()
         else:
-            http.close()
             raise Exception("There's problem accessing API")
 
 
