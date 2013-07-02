@@ -10,7 +10,7 @@ import string
 # SMSGlobalAPIWrapper
 # @author: Huy Dinh <huy.dinh@smsglobal.com>
 #
-class SMSGlobalAPIWrapper (object):
+class Wrapper (object):
 
     TYPE_JSON = "application/json"
     TYPE_XML = "application/xml"
