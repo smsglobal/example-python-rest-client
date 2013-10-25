@@ -13,6 +13,6 @@ parser.add_option("-s", "--ssl", dest="ssl", action="store_true", default=False,
 # Do it, get the balance
 
 apiWrapper = SMSGlobalAPI.Wrapper(args[0], args[1], "http", "api.smsglobal.com", 80, "v1", "", options.verbose, SMSGlobalAPI.Wrapper.TYPE_JSON)
-balance = json.loads(apiWrapper.get("balance"))
-print json.dumps(balance, sort_keys=True, indent=4, separators=(',', ': '))
+groups = json.loads(apiWrapper.get("group"))
+print json.dumps(groups, sort_keys=True, indent=4, separators=(',', ': '))
 
