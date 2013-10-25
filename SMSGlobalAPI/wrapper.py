@@ -39,12 +39,12 @@ class Wrapper (object):
         return self.connect("DELETE", action, id)
 
     def connect(self, method, action, id = None):
-        action = "/%s/%s" % (self.apiVersion, action)
+        action = "/%s/%s/" % (self.apiVersion, action)
         if (id != None) and (id != ''):
-            action = "/%s/%s/id/%s" % (self.apiVersion, action, id)
+            action = "/%s/%s/id/%s/" % (self.apiVersion, action, id)
 
         # Set up request metadata
-        if method not in ["GET", "POST", "DELETE"]:
+        if method not in ["GET", "POST", "DELETE", "OPTIONS", "PATCH"]:
             method = "GET"
 
         headers = {"Authorization" : self.get_authorisation_http_header(method, action), "User-Agent" : "SMS Python Client", "Accept": self.type}
